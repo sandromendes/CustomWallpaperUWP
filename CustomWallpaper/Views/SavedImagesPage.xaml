@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="CustomWallpaper.Views.SavedImagesListPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:vm="using:CustomWallpaper.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:prism="using:Prism.Windows.Mvvm"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Saved Images"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Foreground="#2D2D2D"
+                   Margin="0,0,0,12"
+                   Grid.Row="0"
+                   TextWrapping="Wrap" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,20">
+            <Button Content="⟳ Refresh"
+                    Command="{x:Bind ViewModel.RefreshCommand}"
+                    Padding="14,8"
+                    Background="#0078D7"
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    BorderThickness="0"
+                    CornerRadius="6"
+                    HorizontalAlignment="Left"/>
+        </StackPanel>
+
+        <controls:DataGrid ItemsSource="{x:Bind ViewModel.Images, Mode=OneWay}"
+                           AutoGenerateColumns="False"
+                           IsReadOnly="True"
+                           Grid.Row="2"
+                           Margin="0,0,0,10"
+                           CornerRadius="4"
+                           HeadersVisibility="Column"
+                           GridLinesVisibility="Horizontal"
+                           BorderThickness="1"
+                           BorderBrush="#CCC"
+                           RowBackground="White"
+                           AlternatingRowBackground="#F8F8F8"
+                           ColumnHeaderHeight="40"
+                           RowHeight="40">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn Header="ID" Binding="{Binding Id}" />
+                <controls:DataGridTextColumn Header="Filename" Binding="{Binding FileName}" />
+                <controls:DataGridTextColumn Header="Extension" Binding="{Binding FileExtension}" />
+                <controls:DataGridTextColumn Header="Full Path" Binding="{Binding FilePath}" />
+                <controls:DataGridTextColumn Header="Created" Binding="{Binding DateCreated}" />
+                <controls:DataGridTextColumn Header="Modified" Binding="{Binding DateModified}" />
+                <controls:DataGridCheckBoxColumn Header="Favorite" Binding="{Binding IsFavorite}" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+    </Grid>
+</Page>

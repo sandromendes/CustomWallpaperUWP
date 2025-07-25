@@ -1,0 +1,79 @@
+## Ignore para projetos UWP C# no Visual Studio
+
+# Build
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+
+# Visual Studio
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+
+# Arquivos de log e cache
+*.log
+*.tlog
+*.cache
+*.pdb
+*.ilk
+*.idb
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.symbols.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Diretório de pacotes restaurados
+**/packages/*/
+!**/packages/build/
+!**/packages/repositories.config
+
+# Backup e arquivos temporários
+*.bak
+*.tmp
+*.temp
+~$*
+
+# Arquivos de publicação
+AppPackages/
+BundleArtifacts/
+Package.appxmanifest
+Package.StoreAssociation.xml
+TestResults/
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+
+# Arquivos de debug
+*.mdb
+*.dmp
+*.map
+
+# Configurações locais
+*.userprefs
+*.user.config
+*.localhistory/
+*.sln.ide
+
+# Diretórios específicos de UWP
+Generated Files/
+ipch/
+*.dbmdl
+
+# Rider/JetBrains IDEs
+.idea/
+*.sln.iml
+
+# Arquivos de trava e bloqueio
+*.lock.json

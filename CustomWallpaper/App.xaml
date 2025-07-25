@@ -1,0 +1,8 @@
+﻿<windows:PrismUnityApplication
+    xmlns:windows="using:Prism.Unity.Windows"
+    x:Class="CustomWallpaper.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CustomWallpaper">
+
+</windows:PrismUnityApplication>

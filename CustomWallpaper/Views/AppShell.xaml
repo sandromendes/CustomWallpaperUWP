@@ -1,0 +1,61 @@
+﻿<Page
+    x:Class="CustomWallpaper.Views.AppShell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="using:Prism.Windows.Mvvm"
+    xmlns:views="using:CustomWallpaper.Views"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <MenuBar Grid.Row="0"
+                Background="LightGray"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Stretch">
+            <MenuBarItem Title="File">
+                <MenuFlyoutItem Text="Import Folder..." Command="{x:Bind ViewModel.ImportFolderCommand}"/>
+                <MenuFlyoutItem Text="Export History" Command="{x:Bind ViewModel.ExportHistoryCommand}"/>
+                <MenuFlyoutItem Text="Export Logs" Command="{x:Bind ViewModel.ExportLogsCommand}"/>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Exit" Command="{x:Bind ViewModel.ExitCommand}"/>
+            </MenuBarItem>
+
+            <MenuBarItem Title="Tools">
+                <MenuFlyoutItem Text="Run Manual Analysis" Command="{x:Bind ViewModel.RunManualAnalysisCommand}"/>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutSubItem Text="Background Tasks" >
+                    <MenuFlyoutItem Text="Start Database Stress" Command="{x:Bind ViewModel.StartDbStressCommand}"/>
+                    <MenuFlyoutItem Text="Stop Database Stress" Command="{x:Bind ViewModel.StopDbStressCommand}" IsEnabled="False"/>
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem Text="Start Smart Engine" Command="{x:Bind ViewModel.StartSmartEngineCommand}"/>
+                    <MenuFlyoutItem Text="Stop Smart Engine" Command="{x:Bind ViewModel.StopSmartEngineCommand}" IsEnabled="False"/>
+                </MenuFlyoutSubItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Force Crash" Command="{x:Bind ViewModel.ForceCrashCommand}" />
+            </MenuBarItem>
+        </MenuBar>
+
+        <NavigationView
+                Grid.Row="1"
+                x:Name="NavView"
+                Background="LightGray"
+                IsBackButtonVisible="Collapsed"
+                IsSettingsVisible="False"
+                IsPaneOpen="False"
+                SelectionChanged="NavView_SelectionChanged">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Home" Icon="BrowsePhotos" Tag="PicturesGridPage" />
+                <NavigationViewItem Content="Saved Images" Icon="List" Tag="SavedImagesListPage" />
+                <NavigationViewItem Content="History" Icon="Library" Tag="WallpaperHistoryPage" />
+                <NavigationViewItem Content="Deprecated" Icon="Bookmarks" Tag="MainPage" />
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="ContentFrame" />
+        </NavigationView>
+    </Grid>
+</Page>
