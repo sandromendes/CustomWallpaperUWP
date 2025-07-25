@@ -70,6 +70,10 @@ namespace CustomWallpaper.Infrastructure.Repositories
 
         public async Task AddAsync(Image image)
         {
+            var existing = await GetByHashAsync(image.Hash);
+            if (existing != null)
+                return;
+
             using (var connection = DatabaseBootstrapper.GetConnection())
             {
                 await connection.OpenAsync();

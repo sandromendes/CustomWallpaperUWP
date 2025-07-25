@@ -17,6 +17,7 @@ using Prism.Events;
 using Prism.Windows.Navigation;
 using System.Diagnostics;
 using CustomWallpaper.Core.Services;
+using System.Threading;
 
 namespace CustomWallpaper.ViewModels
 {
@@ -67,36 +68,49 @@ namespace CustomWallpaper.ViewModels
             });
         }
 
+        private readonly SemaphoreSlim _loadImagesSemaphore = new SemaphoreSlim(1, 1);
+
         public async Task LoadImagesFromFolderAsync(StorageFolder folder)
         {
             if (folder == null)
                 return;
 
-            StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+            if (!await _loadImagesSemaphore.WaitAsync(0))
+                return; // Já está executando, evita reentrância
 
-            Images.Clear();
-
-            var files = await folder.GetFilesAsync();
-            foreach (var file in files)
+            try
             {
-                var ext = file.FileType.ToLowerInvariant();
-                if (ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".bmp")
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+
+                Images.Clear();
+
+                var files = await folder.GetFilesAsync();
+                foreach (var file in files)
                 {
-                    await _imageService.AddOrUpdateFromFileAsync(file);
-
-                    var thumb = await LoadThumbnailAsync(file);
-                    Images.Add(new ImageItem
+                    var ext = file.FileType.ToLowerInvariant();
+                    if (ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".bmp")
                     {
-                        Name = file.Name,
-                        Path = file.Path,
-                        Thumbnail = thumb
-                    });
-                }
-            }
+                        await _imageService.AddOrUpdateFromFileAsync(file);
 
-            if (Images.Any())
-                _pageStateService.Set("ImageThumbnails", Images.ToList());
+                        var thumb = await LoadThumbnailAsync(file);
+                        Images.Add(new ImageItem
+                        {
+                            Name = file.Name,
+                            Path = file.Path,
+                            Thumbnail = thumb
+                        });
+                    }
+                }
+
+                if (Images.Any())
+                    _pageStateService.Set("ImageThumbnails", Images.ToList());
+            }
+            finally
+            {
+                _loadImagesSemaphore.Release();
+            }
         }
+
 
         private async Task<BitmapImage> LoadThumbnailAsync(StorageFile file)
         {
