@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel;
 using Microsoft.Practices.Unity;
-using CustomWallpaper.Core.Services;
+using CustomWallpaper.CrossCutting.Services;
 using CustomWallpaper.Services.Wallpapers;
 using CustomWallpaper.Services.BackgroundTasks;
 using CustomWallpaper.Services.WallpaperHistories;

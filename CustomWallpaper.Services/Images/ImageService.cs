@@ -1,13 +1,11 @@
-﻿using CustomWallpaper.Core.Services;
-using CustomWallpaper.Core.Utils;
+﻿using CustomWallpaper.CrossCutting.Services;
+using CustomWallpaper.CrossCutting.Utils;
 using CustomWallpaper.Domain.Application;
 using CustomWallpaper.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
-using Windows.Storage.Streams;
 
 namespace CustomWallpaper.Services.Images
 {
@@ -15,9 +13,9 @@ namespace CustomWallpaper.Services.Images
     {
         private readonly IImageRepository _repository;
         private readonly ILoggerService _logger;
+        private const string Source = nameof(ImageService);
 
-        public ImageService(IImageRepository repository,
-            ILoggerService logger)
+        public ImageService(IImageRepository repository, ILoggerService logger)
         {
             _repository = repository;
             _logger = logger;
@@ -25,38 +23,99 @@ namespace CustomWallpaper.Services.Images
 
         public async Task AddOrUpdateFromFileAsync(StorageFile file)
         {
-            var hash = await FileHasher.ComputeHashAsync(file);
-            if (await _repository.ExistsAsync(hash))
-                return;
-
-            var props = await file.Properties.GetImagePropertiesAsync();
-            var basicProps = await file.GetBasicPropertiesAsync();
-
-            var image = new Image
+            try
             {
-                FileName = file.Name,
-                FilePath = file.Path,
-                FileExtension = file.FileType,
-                FileSizeInBytes = (long)basicProps.Size,
-                DateCreated = file.DateCreated.ToString("o"),
-                DateModified = basicProps.DateModified.ToString("o"),
-                Width = (int)props.Width,
-                Height = (int)props.Height,
-                Hash = hash,
-                IsFavorite = false
-            };
+                _logger.Info(Source, $"Starting file processing: {file?.Name}");
 
-            await _repository.AddAsync(image);
+                var hash = await FileHasher.ComputeHashAsync(file);
+                _logger.Info(Source, $"Computed hash: {hash}");
+
+                if (await _repository.ExistsAsync(hash))
+                {
+                    _logger.Info(Source, $"Image with hash {hash} already exists. Skipping.");
+                    return;
+                }
+
+                var props = await file.Properties.GetImagePropertiesAsync();
+                var basicProps = await file.GetBasicPropertiesAsync();
+
+                var image = new Image
+                {
+                    FileName = file.Name,
+                    FilePath = file.Path,
+                    FileExtension = file.FileType,
+                    FileSizeInBytes = (long)basicProps.Size,
+                    DateCreated = file.DateCreated.ToString("o"),
+                    DateModified = basicProps.DateModified.ToString("o"),
+                    Width = (int)props.Width,
+                    Height = (int)props.Height,
+                    Hash = hash,
+                    IsFavorite = false
+                };
+
+                await _repository.AddAsync(image);
+                _logger.Info(Source, $"Image added successfully: {file.Name}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Source, ex, $"Error while adding or updating image from file {file?.Name}");
+            }
         }
 
-        public Task<IEnumerable<Image>> GetAllAsync() => _repository.GetAllAsync();
-        public Task<Image> GetByHashAsync(string hash) => _repository.GetByHashAsync(hash);
+        public async Task<IEnumerable<Image>> GetAllAsync()
+        {
+            try
+            {
+                _logger.Info(Source, "Retrieving all images.");
+                return await _repository.GetAllAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.Fatal(Source, ex, "Fatal error while retrieving all images.");
+                return new List<Image>();
+            }
+        }
 
-        public Task<IEnumerable<Image>> GetAllImagesAsync() => _repository.GetAllAsync();
-        public Task<Image> GetImageByIdAsync(int id) => _repository.GetByIdAsync(id);
-        public Task<Image> GetImageByHashAsync(string hash) => _repository.GetByHashAsync(hash);
-        public Task AddImageAsync(Image image) => _repository.AddAsync(image);
-        public Task<bool> ImageExistsAsync(string hash) => _repository.ExistsAsync(hash);
-        public Task UpdateImageAsync(Image image) => _repository.UpdateAsync(image);
+        public async Task<Image> GetByHashAsync(string hash)
+        {
+            try
+            {
+                _logger.Info(Source, $"Fetching image by hash: {hash}");
+                return await _repository.GetByHashAsync(hash);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Source, ex, $"Error while fetching image with hash {hash}");
+                return null;
+            }
+        }
+
+        public async Task<Image> GetByIdAsync(int id)
+        {
+            try
+            {
+                _logger.Info(Source, $"Fetching image by ID: {id}");
+                return await _repository.GetByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Source, ex, $"Error while fetching image with ID {id}");
+                return null;
+            }
+        }
+
+        public async Task<bool> ExistsAsync(string hash)
+        {
+            try
+            {
+                _logger.Info(Source, $"Checking if image exists with hash: {hash}");
+                return await _repository.ExistsAsync(hash);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Source, ex, $"Error while checking existence of image with hash {hash}");
+                return false;
+            }
+        }
     }
 }

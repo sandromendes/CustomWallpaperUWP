@@ -7,7 +7,7 @@ namespace CustomWallpaper.Services.WallpaperHistories
 {
     public interface IWallpaperHistoryService
     {
-        Task AddAsync(int imageId, string source);
+        Task AddAsync(string imageId, string source);
         Task<IEnumerable<WallpaperHistory>> GetAllAsync();
         Task<WallpaperHistory> GetLastAppliedAsync();
         Task<IEnumerable<WallpaperHistoryDto>> GetHistoryWithImageNamesAsync();

@@ -19,9 +19,10 @@ namespace CustomWallpaper.Infrastructure.Repositories
                 var command = connection.CreateCommand();
 
                 command.CommandText = @"
-                    INSERT INTO Folders (FolderPath, FolderName, DateAdded, AccessToken)
-                    VALUES ($path, $name, $date, $token)";
+                    INSERT INTO Folders (Id, FolderPath, FolderName, DateAdded, AccessToken)
+                    VALUES ($id, $path, $name, $date, $token)";
 
+                command.Parameters.AddWithValue("$id", Guid.NewGuid().ToString());
                 command.Parameters.AddWithValue("$path", folder.FolderPath);
                 command.Parameters.AddWithValue("$name", folder.FolderName);
                 command.Parameters.AddWithValue("$date", folder.DateAdded.ToString("o"));
@@ -47,7 +48,7 @@ namespace CustomWallpaper.Infrastructure.Repositories
                     {
                         folders.Add(new Folder
                         {
-                            Id = reader.GetInt32(0),
+                            Id = reader.GetString(0),
                             FolderPath = reader.GetString(1),
                             FolderName = reader.GetString(2),
                             DateAdded = DateTime.Parse(reader.GetString(3)),

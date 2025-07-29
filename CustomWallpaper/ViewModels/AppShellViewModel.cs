@@ -1,5 +1,5 @@
-﻿using CustomWallpaper.Core.Events;
-using CustomWallpaper.Core.Services;
+﻿using CustomWallpaper.CrossCutting.Events;
+using CustomWallpaper.CrossCutting.Services;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.BackgroundTasks;
 using CustomWallpaper.Services.SmartEngine;

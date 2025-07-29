@@ -48,7 +48,7 @@ git clone https://github.com/sandromendes/CustomWallpaperUWP.git
 
 5. Press `F5` to build and run.
 
-## 🧭 Navigation Flow
+## Navigation Flow
 
 - App starts with `AppShell`, the main shell containing a `NavigationView`.
 - Initial navigation is handled in `OnLaunchApplicationAsync` via the Prism NavigationService.

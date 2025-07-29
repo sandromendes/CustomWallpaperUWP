@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace CustomWallpaper.Core.Utils
+namespace CustomWallpaper.CrossCutting.Utils
 {
     public static class FileHasher
     {

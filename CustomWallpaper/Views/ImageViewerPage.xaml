@@ -14,8 +14,8 @@
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Padding="20">
                 <Image Source="{Binding Image.Thumbnail, Mode=OneWay}" 
                        Stretch="Uniform" 
-                       MaxWidth="800" 
-                       MaxHeight="600"/>
+                       MaxWidth="1200" 
+                       MaxHeight="800"/>
                 <TextBlock Text="{Binding Image.Name, Mode=OneWay}" 
                            Foreground="White" 
                            FontSize="20" 

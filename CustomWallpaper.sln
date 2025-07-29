@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper", "CustomWa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Tasks", "CustomWallpaper.Tasks\CustomWallpaper.Tasks.csproj", "{76DDE639-30A8-4F5B-B704-CF3C56BEFFAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Core", "CustomWallpaper.Core\CustomWallpaper.Core.csproj", "{75804C22-9DDB-48B0-B1B4-8F694798A984}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.CrossCutting", "CustomWallpaper.Core\CustomWallpaper.CrossCutting.csproj", "{75804C22-9DDB-48B0-B1B4-8F694798A984}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Domain", "CustomWallpaper.Domain\CustomWallpaper.Domain.csproj", "{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}"
 EndProject

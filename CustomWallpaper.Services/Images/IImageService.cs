@@ -10,11 +10,7 @@ namespace CustomWallpaper.Services.Images
         Task AddOrUpdateFromFileAsync(StorageFile file);
         Task<IEnumerable<Image>> GetAllAsync();
         Task<Image> GetByHashAsync(string hash);
-        Task<IEnumerable<Image>> GetAllImagesAsync();
-        Task<Image> GetImageByIdAsync(int id);
-        Task<Image> GetImageByHashAsync(string hash);
-        Task AddImageAsync(Image image);
-        Task<bool> ImageExistsAsync(string hash);
-        Task UpdateImageAsync(Image image);
+        Task<Image> GetByIdAsync(int id);
+        Task<bool> ExistsAsync(string hash);
     }
 }

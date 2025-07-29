@@ -121,6 +121,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DatabaseBootstrapper.cs" />
+    <Compile Include="Locator\RepositoryLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FolderRepository.cs" />
     <Compile Include="Repositories\ImageRepository.cs" />
@@ -136,6 +137,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomWallpaper.Core\CustomWallpaper.CrossCutting.csproj">
+      <Project>{75804c22-9ddb-48b0-b1b4-8f694798a984}</Project>
+      <Name>CustomWallpaper.CrossCutting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CustomWallpaper.Domain\CustomWallpaper.Domain.csproj">
       <Project>{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}</Project>
       <Name>CustomWallpaper.Domain</Name>

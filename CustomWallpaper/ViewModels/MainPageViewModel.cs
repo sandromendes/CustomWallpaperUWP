@@ -1,6 +1,6 @@
-﻿using CustomWallpaper.Core.Events;
-using CustomWallpaper.Core.Services;
-using CustomWallpaper.Core.Utils;
+﻿using CustomWallpaper.CrossCutting.Events;
+using CustomWallpaper.CrossCutting.Services;
+using CustomWallpaper.CrossCutting.Utils;
 using CustomWallpaper.Domain.Models;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.BackgroundTasks;

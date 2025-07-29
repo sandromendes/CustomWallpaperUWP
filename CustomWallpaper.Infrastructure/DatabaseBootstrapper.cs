@@ -22,7 +22,7 @@ namespace CustomWallpaper.Infrastructure
 
                 var createImagesTable = @"
                     CREATE TABLE IF NOT EXISTS Images (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Id TEXT PRIMARY KEY,
                         FileName TEXT NOT NULL,
                         FilePath TEXT NOT NULL,
                         FileExtension TEXT,
@@ -38,7 +38,7 @@ namespace CustomWallpaper.Infrastructure
 
                 var ceateFoldersTableSql = @"
                     CREATE TABLE IF NOT EXISTS Folders (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Id TEXT PRIMARY KEY,
                         FolderPath TEXT NOT NULL UNIQUE,
                         FolderName TEXT,
                         DateAdded TEXT,
@@ -47,8 +47,8 @@ namespace CustomWallpaper.Infrastructure
 
                 var createWallpaperHistory = @"
                     CREATE TABLE IF NOT EXISTS WallpaperHistory (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        ImageId INTEGER NOT NULL,
+                        Id TEXT PRIMARY KEY,
+                        ImageId TEXT NOT NULL,
                         AppliedAt TEXT NOT NULL,
                         Source TEXT,
                         FOREIGN KEY(ImageId) REFERENCES Images(Id)

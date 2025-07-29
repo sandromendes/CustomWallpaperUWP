@@ -233,9 +233,9 @@
     <None Include="CustomWallpaper_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomWallpaper.Core\CustomWallpaper.Core.csproj">
+    <ProjectReference Include="..\CustomWallpaper.Core\CustomWallpaper.CrossCutting.csproj">
       <Project>{75804C22-9DDB-48B0-B1B4-8F694798A984}</Project>
-      <Name>CustomWallpaper.Core</Name>
+      <Name>CustomWallpaper.CrossCutting</Name>
     </ProjectReference>
     <ProjectReference Include="..\CustomWallpaper.Domain\CustomWallpaper.Domain.csproj">
       <Project>{5da52734-6774-4aa0-97e6-3c16b5fbd6e5}</Project>

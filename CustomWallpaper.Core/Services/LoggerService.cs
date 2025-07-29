@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using Windows.Storage;
 
-namespace CustomWallpaper.Core.Services
+namespace CustomWallpaper.CrossCutting.Services
 {
     public class LoggerService : ILoggerService
     {
-        private const string LogFileName = "CustomWallpaper";
+        public string LogFileName { get; set; } = "CustomWallpaper";
 
         public void Info(string source, string message)
         {
@@ -43,7 +43,7 @@ namespace CustomWallpaper.Core.Services
             }
         }
 
-        private static string GetLogFileName()
+        private string GetLogFileName()
         {
             var date = DateTime.Now.ToString("yyyy-MM-dd");
             return $"{LogFileName}_{date}.log";

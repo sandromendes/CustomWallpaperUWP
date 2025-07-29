@@ -6,34 +6,37 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:CustomWallpaper.Views"
-    prism:ViewModelLocator.AutoWireViewModel="True">
+    mc:Ignorable="d"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- MenuBar refinado -->
         <MenuBar Grid.Row="0"
-                Background="LightGray"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Stretch">
+                 Background="{ThemeResource SystemControlAltLowAcrylicElementBrush}"
+                 Padding="12,4"
+                 HorizontalAlignment="Stretch">
             <MenuBarItem Title="File">
-                <MenuFlyoutItem Text="Import Folder..." Command="{x:Bind ViewModel.ImportFolderCommand}"/>
-                <MenuFlyoutItem Text="Export History" Command="{x:Bind ViewModel.ExportHistoryCommand}"/>
-                <MenuFlyoutItem Text="Export Logs" Command="{x:Bind ViewModel.ExportLogsCommand}"/>
+                <MenuFlyoutItem Text="Import Folder..." Command="{x:Bind ViewModel.ImportFolderCommand}" />
+                <MenuFlyoutItem Text="Export History" Command="{x:Bind ViewModel.ExportHistoryCommand}" IsEnabled="False"/>
+                <MenuFlyoutItem Text="Export Logs" Command="{x:Bind ViewModel.ExportLogsCommand}" />
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem Text="Exit" Command="{x:Bind ViewModel.ExitCommand}"/>
+                <MenuFlyoutItem Text="Exit" Command="{x:Bind ViewModel.ExitCommand}" />
             </MenuBarItem>
 
             <MenuBarItem Title="Tools">
-                <MenuFlyoutItem Text="Run Manual Analysis" Command="{x:Bind ViewModel.RunManualAnalysisCommand}"/>
+                <MenuFlyoutItem Text="Run Manual Analysis" Command="{x:Bind ViewModel.RunManualAnalysisCommand}" IsEnabled="False"/>
                 <MenuFlyoutSeparator />
-                <MenuFlyoutSubItem Text="Background Tasks" >
-                    <MenuFlyoutItem Text="Start Database Stress" Command="{x:Bind ViewModel.StartDbStressCommand}"/>
-                    <MenuFlyoutItem Text="Stop Database Stress" Command="{x:Bind ViewModel.StopDbStressCommand}" IsEnabled="False"/>
+                <MenuFlyoutSubItem Text="Background Tasks">
+                    <MenuFlyoutItem Text="Start DB Stress" Command="{x:Bind ViewModel.StartDbStressCommand}" />
+                    <MenuFlyoutItem Text="Stop DB Stress" Command="{x:Bind ViewModel.StopDbStressCommand}" IsEnabled="False" />
                     <MenuFlyoutSeparator />
-                    <MenuFlyoutItem Text="Start Smart Engine" Command="{x:Bind ViewModel.StartSmartEngineCommand}"/>
+                    <MenuFlyoutItem Text="Start Smart Engine" Command="{x:Bind ViewModel.StartSmartEngineCommand}" />
                     <MenuFlyoutItem Text="Stop Smart Engine" Command="{x:Bind ViewModel.StopSmartEngineCommand}" IsEnabled="False"/>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSeparator />
@@ -41,23 +44,34 @@
             </MenuBarItem>
         </MenuBar>
 
-        <NavigationView
-                Grid.Row="1"
-                x:Name="NavView"
-                Background="LightGray"
-                IsBackButtonVisible="Collapsed"
-                IsSettingsVisible="False"
-                IsPaneOpen="False"
-                ItemInvoked="NavView_ItemInvoked">
+        <!-- Navegação principal com cabeçalho -->
+        <NavigationView x:Name="NavView"
+                        Grid.Row="1"
+                        IsBackButtonVisible="Collapsed"
+                        IsSettingsVisible="False"
+                        PaneDisplayMode="Left"
+                        SelectionFollowsFocus="Enabled"
+                        ItemInvoked="NavView_ItemInvoked"
+                        Background="{ThemeResource SystemControlAltLowAcrylicElementBrush}">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Home" Icon="BrowsePhotos" Tag="PicturesGridPage" />
-                <NavigationViewItem Content="Saved Images" Icon="List" Tag="SavedImagesListPage" />
-                <NavigationViewItem Content="History" Icon="Library" Tag="WallpaperHistoryPage" />
-                <NavigationViewItem Content="Deprecated" Icon="Bookmarks" Tag="MainPage" />
+                <NavigationViewItem Content="Home"
+                                    Icon="Home"
+                                    Tag="PicturesGridPage" />
+                <NavigationViewItem Content="Saved Images"
+                                    Icon="List"
+                                    Tag="SavedImagesListPage" />
+                <NavigationViewItem Content="History"
+                                    Icon="Library"
+                                    Tag="WallpaperHistoryPage" />
+                <NavigationViewItem Content="Deprecated"
+                                    Icon="Delete"
+                                    Tag="MainPage" />
             </NavigationView.MenuItems>
 
-            <Frame x:Name="ContentFrame" />
+            <!-- Local onde as páginas são exibidas -->
+            <Frame x:Name="ContentFrame"
+                   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
         </NavigationView>
     </Grid>
 </Page>

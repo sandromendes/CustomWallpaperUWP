@@ -143,9 +143,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomWallpaper.Core\CustomWallpaper.Core.csproj">
+    <ProjectReference Include="..\CustomWallpaper.Core\CustomWallpaper.CrossCutting.csproj">
       <Project>{75804c22-9ddb-48b0-b1b4-8f694798a984}</Project>
-      <Name>CustomWallpaper.Core</Name>
+      <Name>CustomWallpaper.CrossCutting</Name>
     </ProjectReference>
     <ProjectReference Include="..\CustomWallpaper.Domain\CustomWallpaper.Domain.csproj">
       <Project>{5da52734-6774-4aa0-97e6-3c16b5fbd6e5}</Project>

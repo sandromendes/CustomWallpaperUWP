@@ -6,7 +6,7 @@
     xmlns:local="using:CustomWallpaper.Domain.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="using:Prism.Windows.Mvvm"
+    xmlns:prism="using:Prism.Windows.Mvvm" 
     xmlns:viewmodels="using:CustomWallpaper.ViewModels" 
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
@@ -19,10 +19,12 @@
                 <!-- Title -->
                 <TextBlock Text="Image Gallery"
                            FontSize="28"
-                           FontWeight="SemiBold"
+                           FontWeight="SemiLight"
+                           FontFamily="Roboto"
                            Margin="0,0,0,12"
-                           HorizontalAlignment="Center"
-                           TextAlignment="Center"/>
+                           Grid.Row="0"
+                           TextAlignment="Left"
+                           HorizontalAlignment="Left"/>
 
                 <!-- Borda pontilhada ao redor das imagens -->
                 <Border BorderBrush="Gray"
@@ -35,6 +37,7 @@
                     <GridView x:Name="GridViewElementName"
                               ItemsSource="{Binding Images}"
                               IsItemClickEnabled="True"
+                              ItemClick="GridViewElementName_ItemClick"
                               MaxWidth="1200"
                               MinHeight="200" 
                               MinWidth="200"

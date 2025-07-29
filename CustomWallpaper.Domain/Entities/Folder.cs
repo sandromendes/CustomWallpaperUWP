@@ -4,7 +4,7 @@ namespace CustomWallpaper.Domain.Entities
 {
     public class Folder
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FolderPath { get; set; }
         public string FolderName { get; set; }
         public DateTime DateAdded { get; set; }

@@ -9,18 +9,20 @@ using Windows.UI.Xaml.Media.Imaging;
 using System;
 using System.Linq;
 using Prism.Commands;
-using CustomWallpaper.Core.Events;
+using CustomWallpaper.CrossCutting.Events;
 using Prism.Events;
 using Prism.Windows.Navigation;
-using CustomWallpaper.Core.Services;
+using CustomWallpaper.CrossCutting.Services;
 using System.Threading;
 using CustomWallpaper.Services.Folders;
 using System.Collections.Generic;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using CustomWallpaper.Navigation;
-using CustomWallpaper.Core.Utils;
+using CustomWallpaper.CrossCutting.Utils;
 using CustomWallpaper.Services.WallpaperHistories;
+using System.Windows.Input;
+using CustomWallpaper.Views;
 
 namespace CustomWallpaper.ViewModels
 {
@@ -33,7 +35,7 @@ namespace CustomWallpaper.ViewModels
         private readonly IWallpaperService _wallpaperService;
         private readonly IWallpaperHistoryService _wallpaperHistoryService;
 
-        private readonly INavigationService _navigationService;
+        private readonly INavigationServiceEx _navigationService;
         private readonly ILoggerService _loggerService;
 
         private readonly IEventAggregator _eventAggregator;
@@ -42,13 +44,14 @@ namespace CustomWallpaper.ViewModels
 
         public DelegateCommand<ImageItem> SetAsWallpaperCommand { get; }
         public DelegateCommand<ImageItem> SetAsLockScreenCommand { get; }
+        public ICommand NavigateToImageViewerCommand { get; }
 
         public PicturesGridPageViewModel(
             IImageService imageService,
             IFolderService folderService,
             IWallpaperService wallpaperService,
             IWallpaperHistoryService wallpaperHistoryService,
-            INavigationService navigationService,
+            INavigationServiceEx navigationService,
             ILoggerService loggerService,
             IEventAggregator eventAggregator)
         {
@@ -63,6 +66,7 @@ namespace CustomWallpaper.ViewModels
 
             SetAsWallpaperCommand = new DelegateCommand<ImageItem>(SetAsWallpaper);
             SetAsLockScreenCommand = new DelegateCommand<ImageItem>(SetAsLockscreen);
+            NavigateToImageViewerCommand = new DelegateCommand<ImageItem>(NavigateToImageViewer);
 
             _eventAggregator.GetEvent<FolderImportedEvent>().Subscribe(async storageFolder =>
             {
@@ -136,6 +140,16 @@ namespace CustomWallpaper.ViewModels
                     _loggerService.Error(nameof(PicturesGridPageViewModel), ex, $"Failed to load folder {folder.FolderPath}");
                 }
             }
+        }
+
+        private async void NavigateToImageViewer(ImageItem image)
+        {
+            if (image == null) return;
+
+            await _navigationService.NavigateAsync(new NavigationItem(
+                key: nameof(ImageViewerPage),
+                pageType: typeof(ImageViewerPage),
+                parameter: image));
         }
 
         private readonly SemaphoreSlim _loadImagesSemaphore = new SemaphoreSlim(1, 1);

@@ -3,7 +3,7 @@ using CustomWallpaper.Tasks;
 using System.Threading.Tasks;
 using System;
 using Windows.ApplicationModel.Background;
-using CustomWallpaper.Core.Services;
+using CustomWallpaper.CrossCutting.Services;
 
 public class BackgroundTaskService : IBackgroundTaskService
 {

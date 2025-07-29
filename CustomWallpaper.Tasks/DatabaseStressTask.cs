@@ -1,7 +1,6 @@
-﻿using CustomWallpaper.Core.Locator;
-using CustomWallpaper.Core.Locator.CustomWallpaper.Infrastructure;
+﻿using CustomWallpaper.CrossCutting.Services;
 using CustomWallpaper.Domain.Application;
-using CustomWallpaper.Tasks.Logs;
+using CustomWallpaper.Infrastructure.Locator;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,18 +10,28 @@ namespace CustomWallpaper.Tasks
 {
     public sealed class DatabaseStressTask : IBackgroundTask
     {
+        private const string LogFilePrefix = "CustomWallpaperBgTask";
+
         private BackgroundTaskDeferral _deferral;
         private IImageRepository _imageRepository;
+
+        private ILoggerService _loggerService;
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
             _deferral = taskInstance.GetDeferral();
             taskInstance.Canceled += OnCanceled;
 
-            await BackgroundTaskLoggerHelper.InfoAsync(nameof(DatabaseStressTask), "Task STARTED");
+            _loggerService = new LoggerService();
 
             try
             {
+                _loggerService.LogFileName = LogFilePrefix;
+
+                RepositoryLocator.Initialize(_loggerService);
+
+                _loggerService.Info(nameof(DatabaseStressTask), "Task STARTED");
+
                 _imageRepository = RepositoryLocator.GetImageRepository();
 
                 var startTime = DateTime.UtcNow;
@@ -38,17 +47,17 @@ namespace CustomWallpaper.Tasks
                         await _imageRepository.UpdateAsync(image);
                     }
 
-                    await BackgroundTaskLoggerHelper.InfoAsync(nameof(DatabaseStressTask),
+                    _loggerService.Info(nameof(DatabaseStressTask),
                         $"Updated {images.Count()} images at {DateTime.UtcNow}");
 
                     await Task.Delay(1000);
                 }
 
-                await BackgroundTaskLoggerHelper.InfoAsync(nameof(DatabaseStressTask), "Task FINISHED 6-minute cycle");
+                _loggerService.Info(nameof(DatabaseStressTask), "Task FINISHED 6-minute cycle");
             }
             catch (Exception ex)
             {
-                await BackgroundTaskLoggerHelper.ErrorAsync(nameof(DatabaseStressTask), ex);
+                _loggerService.Error(nameof(DatabaseStressTask), ex);
             }
             finally
             {
@@ -58,7 +67,7 @@ namespace CustomWallpaper.Tasks
 
         private async void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
-            await BackgroundTaskLoggerHelper.InfoAsync(nameof(DatabaseStressTask), $"Task CANCELED. Reason: {reason}");
+            _loggerService.Info(nameof(DatabaseStressTask), $"Task CANCELED. Reason: {reason}");
         }
     }
 }

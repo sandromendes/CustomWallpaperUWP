@@ -2,6 +2,7 @@
 using CustomWallpaper.Navigation;
 using Prism.Windows.Navigation;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CustomWallpaper.ViewModels
 {
@@ -12,6 +13,14 @@ namespace CustomWallpaper.ViewModels
         {
             get => _image;
             set => SetProperty(ref _image, value);
+        }
+
+        public override async Task OnShowAsync(object parameter = null)
+        {
+            if (parameter is ImageItem image)
+            {
+                Image = image;
+            }
         }
 
         public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
