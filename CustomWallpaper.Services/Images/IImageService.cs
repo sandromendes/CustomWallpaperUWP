@@ -16,7 +16,5 @@ namespace CustomWallpaper.Services.Images
         Task AddImageAsync(Image image);
         Task<bool> ImageExistsAsync(string hash);
         Task UpdateImageAsync(Image image);
-
-        Task CopyToClipboardAsync(string imagePath);
     }
 }

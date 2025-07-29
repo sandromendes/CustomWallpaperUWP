@@ -2,6 +2,7 @@
 using CustomWallpaper.Core.Services;
 using CustomWallpaper.Core.Utils;
 using CustomWallpaper.Domain.Models;
+using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.BackgroundTasks;
 using CustomWallpaper.Services.Images;
 using CustomWallpaper.Services.SmartEngine;
@@ -10,7 +11,6 @@ using CustomWallpaper.Services.WallpaperHistories;
 using CustomWallpaper.Services.Wallpapers;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Windows.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,7 +25,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace CustomWallpaper.ViewModels
 {
-    public class MainPageViewModel : ViewModelBase
+    public class MainPageViewModel : ViewModelBaseEx
     {
         private readonly IWallpaperService _wallpaperService;
         private readonly IBackgroundTaskService _backgroundTaskService;

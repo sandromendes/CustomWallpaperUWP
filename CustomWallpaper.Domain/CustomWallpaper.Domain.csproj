@@ -120,8 +120,10 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Application\IFolderRepository.cs" />
     <Compile Include="Application\IImageRepository.cs" />
     <Compile Include="Application\IWallpaperHistoryRepository.cs" />
+    <Compile Include="Entities\Folder.cs" />
     <Compile Include="Entities\Image.cs" />
     <Compile Include="Entities\WallpaperHistory.cs" />
     <Compile Include="Models\ImageItem.cs" />

@@ -1,13 +1,13 @@
 ﻿using CustomWallpaper.Domain.Entities;
+using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.Images;
 using Prism.Commands;
-using Prism.Windows.Mvvm;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace CustomWallpaper.ViewModels
 {
-    public class SavedImagesListPageViewModel : ViewModelBase
+    public class SavedImagesListPageViewModel : ViewModelBaseEx
     {
         private readonly IImageService _imageService;
 
@@ -23,6 +23,11 @@ namespace CustomWallpaper.ViewModels
             _imageService = imageService;
             RefreshCommand = new DelegateCommand(async () => await LoadAsync());
             _ = LoadAsync();
+        }
+
+        public override async Task OnShowAsync(object parameter = null)
+        {
+            await LoadAsync();
         }
 
         private async Task LoadAsync()

@@ -58,25 +58,5 @@ namespace CustomWallpaper.Services.Images
         public Task AddImageAsync(Image image) => _repository.AddAsync(image);
         public Task<bool> ImageExistsAsync(string hash) => _repository.ExistsAsync(hash);
         public Task UpdateImageAsync(Image image) => _repository.UpdateAsync(image);
-
-        public async Task CopyToClipboardAsync(string imagePath)
-        {
-            try
-            {
-                var file = await StorageFile.GetFileFromPathAsync(imagePath);
-                if (file != null)
-                {
-                    var data = new DataPackage();
-                    var streamRef = RandomAccessStreamReference.CreateFromFile(file);
-                    data.SetBitmap(streamRef);
-                    Clipboard.SetContent(data);
-                    Clipboard.Flush(); 
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(nameof(ImageService), ex, $"Error trying to copy image.");
-            }
-        }
     }
 }

@@ -122,6 +122,8 @@
   <ItemGroup>
     <Compile Include="BackgroundTasks\BackgroundTaskService.cs" />
     <Compile Include="BackgroundTasks\IBackgroundTaskService.cs" />
+    <Compile Include="Folders\FolderService.cs" />
+    <Compile Include="Folders\IFolderService.cs" />
     <Compile Include="Images\IImageService.cs" />
     <Compile Include="Images\ImageService.cs" />
     <Compile Include="Selection\IImageSelectionService.cs" />

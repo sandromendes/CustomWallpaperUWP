@@ -41,6 +41,31 @@ namespace CustomWallpaper.Services.Wallpapers
             }
         }
 
+        public async Task SetLockscreenAsync(StorageFile file)
+        {
+            try
+            {
+                if (file == null)
+                {
+                    _logger.Error(nameof(WallpaperService), new ArgumentNullException(nameof(file)), "No file provided to set as lockscreen.");
+                    return;
+                }
+
+                _logger.Info(nameof(WallpaperService), $"Starting lockscreen setting for file: {file.Path}");
+
+                var success = await SetWallpaperOrLockScreenAsync(file, isLockScreen: true);
+
+                if (success)
+                    _logger.Info(nameof(WallpaperService), "lockscreen successfully set.");
+                else
+                    _logger.Error(nameof(WallpaperService), new Exception("API returned false."), "Failed to set lockscreen.");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(nameof(WallpaperService), ex, "Unexpected error while setting lockscreen.");
+            }
+        }
+
         private async Task<bool> SetWallpaperOrLockScreenAsync(StorageFile file, bool isLockScreen)
         {
             bool success = false;

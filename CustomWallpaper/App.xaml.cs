@@ -19,6 +19,10 @@ using Windows.UI.Xaml;
 using CustomWallpaper.Services.SmartEngine;
 using CustomWallpaper.Services.States;
 using Prism.Events;
+using CustomWallpaper.Services.Folders;
+using CustomWallpaper.Navigation;
+using CustomWallpaper.ViewModels;
+using System.ComponentModel;
 
 namespace CustomWallpaper
 {
@@ -87,8 +91,6 @@ namespace CustomWallpaper
             {
                 System.Diagnostics.Debug.WriteLine($"Logger initialization failed: {ex.Message}");
             }
-
-            NavigationService.Navigate("PicturesGrid", null);
         }
 
         protected override Task OnInitializeAsync(IActivatedEventArgs args)
@@ -122,6 +124,8 @@ namespace CustomWallpaper
             Container.RegisterType<WallpaperHistoryPage>();
             Container.RegisterType<ImageViewerPage>();
 
+            RegisterTypeIfMissing(typeof(INavigationServiceEx), typeof(NavigationServiceEx), false);
+
             RegisterTypeIfMissing(typeof(IWallpaperService), typeof(WallpaperService), false);
             RegisterTypeIfMissing(typeof(ILoggerService), typeof(LoggerService), false);
             RegisterTypeIfMissing(typeof(IPageStateService), typeof(PageStateService), true); //singleton
@@ -129,8 +133,10 @@ namespace CustomWallpaper
             RegisterTypeIfMissing(typeof(ISmartEngineService), typeof(SmartEngineService), false);
             RegisterTypeIfMissing(typeof(IWallpaperHistoryService), typeof(WallpaperHistoryService), false);
             RegisterTypeIfMissing(typeof(IImageService), typeof(ImageService), false);
+            RegisterTypeIfMissing(typeof(IFolderService), typeof(FolderService), false);
 
             RegisterTypeIfMissing(typeof(IImageRepository), typeof(ImageRepository),false);
+            RegisterTypeIfMissing(typeof(IFolderRepository), typeof(FolderRepository),false);
             RegisterTypeIfMissing(typeof(IWallpaperHistoryRepository), typeof(WallpaperHistoryRepository),false);
 
             RegisterTypeIfMissing(typeof(IEventAggregator), typeof(EventAggregator), true); //singleton
@@ -140,18 +146,28 @@ namespace CustomWallpaper
         {
             base.ConfigureViewModelLocator();
 
-            ViewModelLocationProvider.Register<AppShell, ViewModels.AppShellViewModel>();
-            ViewModelLocationProvider.Register<SavedImagesListPage, ViewModels.SavedImagesListPageViewModel>();
-            ViewModelLocationProvider.Register<WallpaperHistoryPage, ViewModels.WallpaperHistoryPageViewModel>();
-            ViewModelLocationProvider.Register<PicturesGridPage, ViewModels.PicturesGridPageViewModel>();
-            ViewModelLocationProvider.Register<ImageViewerPage, ViewModels.ImageViewerPageViewModel>();
-
+            ViewModelLocationProvider.Register<AppShell, AppShellViewModel>();
+            ViewModelLocationProvider.Register<SavedImagesListPage, SavedImagesListPageViewModel>();
+            ViewModelLocationProvider.Register<WallpaperHistoryPage, WallpaperHistoryPageViewModel>();
+            ViewModelLocationProvider.Register<PicturesGridPage, PicturesGridPageViewModel>();
+            ViewModelLocationProvider.Register<ImageViewerPage, ImageViewerPageViewModel>();
         }
 
         protected override UIElement CreateShell(Frame rootFrame)
         {
+            var navigationService = new NavigationServiceEx();
+
+            Container.RegisterInstance<INavigationServiceEx>(navigationService);
+
             var shell = Container.Resolve<AppShell>();
-            shell.NavigationFrame.Navigate(typeof(PicturesGridPage));
+
+            navigationService.SetFrame(shell.NavigationFrame);
+
+            _ = navigationService.NavigateAsync(new NavigationItem(
+                key: nameof(PicturesGridPage),
+                pageType: typeof(PicturesGridPage)
+            ));
+
             return shell;
         }
     }

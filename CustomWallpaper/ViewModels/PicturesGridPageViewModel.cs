@@ -1,13 +1,10 @@
 ﻿using CustomWallpaper.Domain.Models;
 using CustomWallpaper.Services.Images;
-using CustomWallpaper.Services.States;
 using CustomWallpaper.Services.Wallpapers;
-using Prism.Windows.Mvvm;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.Storage.AccessCache;
 using Windows.Storage;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using System;
 using System.Linq;
@@ -15,17 +12,27 @@ using Prism.Commands;
 using CustomWallpaper.Core.Events;
 using Prism.Events;
 using Prism.Windows.Navigation;
-using System.Diagnostics;
 using CustomWallpaper.Core.Services;
 using System.Threading;
+using CustomWallpaper.Services.Folders;
+using System.Collections.Generic;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
+using CustomWallpaper.Navigation;
+using CustomWallpaper.Core.Utils;
+using CustomWallpaper.Services.WallpaperHistories;
 
 namespace CustomWallpaper.ViewModels
 {
-    public class PicturesGridPageViewModel : ViewModelBase
+    public class PicturesGridPageViewModel : ViewModelBaseEx
     {
-        private readonly IWallpaperService _wallpaperService;
+        private readonly CoreDispatcher _dispatcher;
+
         private readonly IImageService _imageService;
-        private readonly IPageStateService _pageStateService;
+        private readonly IFolderService _folderService;
+        private readonly IWallpaperService _wallpaperService;
+        private readonly IWallpaperHistoryService _wallpaperHistoryService;
+
         private readonly INavigationService _navigationService;
         private readonly ILoggerService _loggerService;
 
@@ -33,39 +40,102 @@ namespace CustomWallpaper.ViewModels
 
         public ObservableCollection<ImageItem> Images { get; set; } = new ObservableCollection<ImageItem>();
 
-        private ImageItem _selectedItem;
-        public ImageItem SelectedItem
-        {
-            get => _selectedItem;
-            set => SetProperty(ref _selectedItem, value);
-        }
-
-        public DelegateCommand<ImageItem> CopyCommand { get; }
         public DelegateCommand<ImageItem> SetAsWallpaperCommand { get; }
+        public DelegateCommand<ImageItem> SetAsLockScreenCommand { get; }
 
         public PicturesGridPageViewModel(
             IImageService imageService,
+            IFolderService folderService,
             IWallpaperService wallpaperService,
-            IPageStateService pageStateService,
+            IWallpaperHistoryService wallpaperHistoryService,
             INavigationService navigationService,
             ILoggerService loggerService,
             IEventAggregator eventAggregator)
         {
             _imageService = imageService;
+            _folderService = folderService;
             _wallpaperService = wallpaperService;
-            _pageStateService = pageStateService;
+            _wallpaperHistoryService = wallpaperHistoryService;
             _navigationService = navigationService;
             _loggerService = loggerService;
 
             _eventAggregator = eventAggregator;
 
-            CopyCommand = new DelegateCommand<ImageItem>(CopyImage);
             SetAsWallpaperCommand = new DelegateCommand<ImageItem>(SetAsWallpaper);
+            SetAsLockScreenCommand = new DelegateCommand<ImageItem>(SetAsLockscreen);
 
-            _eventAggregator.GetEvent<FolderImportedEvent>().Subscribe(async folder =>
+            _eventAggregator.GetEvent<FolderImportedEvent>().Subscribe(async storageFolder =>
             {
-                await LoadImagesFromFolderAsync(folder);
+                await RegisterFolderAsync(storageFolder);
+
+                await LoadRegisteredFoldersAsync();
             });
+
+            _dispatcher = Window.Current.Dispatcher;
+        }
+
+        public override async Task OnShowAsync(object parameter = null)
+        {
+            await LoadRegisteredFoldersAsync();
+        }
+
+        public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        {
+            await LoadAsyncSafely();
+            base.OnNavigatedTo(e, viewModelState);
+        }
+
+        private async Task LoadAsyncSafely()
+        {
+            try
+            {
+                await LoadRegisteredFoldersAsync();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error(nameof(PicturesGridPageViewModel), ex, $"Failed to load registered folders.");
+            }
+        }
+
+        private async Task RegisterFolderAsync(StorageFolder storageFolder)
+        {
+            try
+            {
+                var existingFolders = await _folderService.GetAllFoldersAsync();
+                
+                if (!existingFolders.Any(f => f.FolderPath == storageFolder.Path))
+                {
+                    string token = Guid.NewGuid().ToString();
+                    await _folderService.AddFolderAsync(storageFolder.Path, token);
+
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace(token, storageFolder);
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error(nameof(PicturesGridPageViewModel), ex, $"Failed to register folder {storageFolder.Path}");
+            }
+        }
+
+        public async Task LoadRegisteredFoldersAsync()
+        {
+            var folders = await _folderService.GetAllFoldersAsync();
+
+            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Images.Clear());
+
+            foreach (var folder in folders)
+            {
+                try
+                {
+                    var storageFolder = await StorageFolder.GetFolderFromPathAsync(folder.FolderPath);
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace(folder.AccessToken, storageFolder);
+                    await LoadImagesFromFolderAsync(storageFolder);
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Error(nameof(PicturesGridPageViewModel), ex, $"Failed to load folder {folder.FolderPath}");
+                }
+            }
         }
 
         private readonly SemaphoreSlim _loadImagesSemaphore = new SemaphoreSlim(1, 1);
@@ -76,14 +146,10 @@ namespace CustomWallpaper.ViewModels
                 return;
 
             if (!await _loadImagesSemaphore.WaitAsync(0))
-                return; // Já está executando, evita reentrância
+                return; // evita reentrância
 
             try
             {
-                StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-
-                Images.Clear();
-
                 var files = await folder.GetFilesAsync();
                 foreach (var file in files)
                 {
@@ -93,24 +159,24 @@ namespace CustomWallpaper.ViewModels
                         await _imageService.AddOrUpdateFromFileAsync(file);
 
                         var thumb = await LoadThumbnailAsync(file);
-                        Images.Add(new ImageItem
+
+                        await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            Name = file.Name,
-                            Path = file.Path,
-                            Thumbnail = thumb
+                            Images.Add(new ImageItem
+                            {
+                                Name = file.Name,
+                                Path = file.Path,
+                                Thumbnail = thumb
+                            });
                         });
                     }
                 }
-
-                if (Images.Any())
-                    _pageStateService.Set("ImageThumbnails", Images.ToList());
             }
             finally
             {
                 _loadImagesSemaphore.Release();
             }
         }
-
 
         private async Task<BitmapImage> LoadThumbnailAsync(StorageFile file)
         {
@@ -122,27 +188,27 @@ namespace CustomWallpaper.ViewModels
             }
         }
 
-        private async void CopyImage(ImageItem item)
-        {
-            if (item != null)
-                await _imageService.CopyToClipboardAsync(item.Path);
-        }
-
         private async void SetAsWallpaper(ImageItem item)
         {
             if (item != null)
             {
                 var file = await StorageFile.GetFileFromPathAsync(item.Path);
                 await _wallpaperService.SetWallpaperAsync(file);
+
+                var image = await _imageService.GetByHashAsync(await FileHasher.ComputeHashAsync(file));
+                await _wallpaperHistoryService.AddAsync(image.Id, "Wallpaper - Manual Selection");
             }
         }
 
-        public void OnItemClick(object sender, ItemClickEventArgs e)
+        private async void SetAsLockscreen(ImageItem item)
         {
-            if (e.ClickedItem is ImageItem image)
+            if (item != null)
             {
-                var result = _navigationService.Navigate("ImageViewer", image);
-                _loggerService.Info(nameof(PicturesGridPageViewModel),$"Navigation to ImageViewerPage: {result}");
+                var file = await StorageFile.GetFileFromPathAsync(item.Path);
+                await _wallpaperService.SetLockscreenAsync(file);
+
+                var image = await _imageService.GetByHashAsync(await FileHasher.ComputeHashAsync(file));
+                await _wallpaperHistoryService.AddAsync(image.Id, "Lockscreen - Manual Selection");
             }
         }
     }

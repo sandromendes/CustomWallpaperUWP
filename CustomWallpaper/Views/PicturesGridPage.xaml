@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="using:Prism.Windows.Mvvm"
+    xmlns:viewmodels="using:CustomWallpaper.ViewModels" 
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
@@ -31,10 +32,9 @@
                         Padding="8">
 
                     <!-- GridView com as imagens -->
-                    <GridView ItemsSource="{Binding Images}"
+                    <GridView x:Name="GridViewElementName"
+                              ItemsSource="{Binding Images}"
                               IsItemClickEnabled="True"
-                              ItemClick="{x:Bind ViewModel.OnItemClick}"
-                              SelectedItem="{Binding SelectedImage, Mode=TwoWay}"
                               MaxWidth="1200"
                               MinHeight="200" 
                               MinWidth="200"
@@ -49,7 +49,7 @@
                         </GridView.ItemsPanel>
 
                         <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="local:ImageItem">
+                            <DataTemplate>
                                 <Grid Width="180" Height="200"
                                       Background="Transparent"
                                       x:Name="ItemRoot">
@@ -60,12 +60,12 @@
                                             BorderBrush="#444"
                                             BorderThickness="1">
                                         <Grid>
-                                            <Image Source="{x:Bind Thumbnail}"
+                                            <Image Source="{Binding Thumbnail, Mode=OneWay}"
                                                    Stretch="UniformToFill"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    Height="150"/>
-                                            <TextBlock Text="{x:Bind Name}"
+                                            <TextBlock Text="{Binding Name, Mode=OneWay}"
                                                        Foreground="White"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Bottom"
@@ -92,11 +92,12 @@
 
                                     <Grid.ContextFlyout>
                                         <MenuFlyout>
-                                            <MenuFlyoutItem Text="Copy"
-                                                            Command="{Binding DataContext.CopyCommand, ElementName=RootPage}"
-                                                            CommandParameter="{Binding}" />
-                                            <MenuFlyoutItem Text="Set as wallpaper"
+                                            <MenuFlyoutItem Text="Set as Wallpaper"
                                                             Command="{Binding DataContext.SetAsWallpaperCommand, ElementName=RootPage}"
+                                                            CommandParameter="{Binding}" />
+                                            
+                                            <MenuFlyoutItem Text="Set as Lockscreen"
+                                                            Command="{Binding DataContext.SetAsLockScreenCommand, ElementName=RootPage}"
                                                             CommandParameter="{Binding}" />
                                         </MenuFlyout>
                                     </Grid.ContextFlyout>

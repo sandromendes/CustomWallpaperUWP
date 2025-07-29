@@ -36,6 +36,15 @@ namespace CustomWallpaper.Infrastructure
                     );
                 ";
 
+                var ceateFoldersTableSql = @"
+                    CREATE TABLE IF NOT EXISTS Folders (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        FolderPath TEXT NOT NULL UNIQUE,
+                        FolderName TEXT,
+                        DateAdded TEXT,
+                        AccessToken TEXT
+                    );";
+
                 var createWallpaperHistory = @"
                     CREATE TABLE IF NOT EXISTS WallpaperHistory (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,6 +58,9 @@ namespace CustomWallpaper.Infrastructure
                 using (var cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = createImagesTable;
+                    await cmd.ExecuteNonQueryAsync();
+
+                    cmd.CommandText = ceateFoldersTableSql;
                     await cmd.ExecuteNonQueryAsync();
 
                     cmd.CommandText = createWallpaperHistory;

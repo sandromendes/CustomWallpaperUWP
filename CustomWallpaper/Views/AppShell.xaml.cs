@@ -18,34 +18,9 @@ namespace CustomWallpaper.Views
             InitializeComponent();
         }
 
-        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.IsSettingsSelected)
-            {
-                // TODO: Menu de configurações
-                // ContentFrame.Navigate(typeof(SettingsPage));
-            }
-            else
-            {
-                var selectedItem = (NavigationViewItem)args.SelectedItem;
-                var pageTag = selectedItem.Tag.ToString();
-
-                switch (pageTag)
-                {
-                    case nameof(MainPage):
-                        ContentFrame.Navigate(typeof(MainPage));
-                        break;
-                    case nameof(PicturesGridPage):
-                        ContentFrame.Navigate(typeof(PicturesGridPage));
-                        break;
-                    case nameof(SavedImagesListPage):
-                        ContentFrame.Navigate(typeof(SavedImagesListPage));
-                        break;
-                    case nameof(WallpaperHistoryPage):
-                        ContentFrame.Navigate(typeof(WallpaperHistoryPage));
-                        break;
-                }
-            }
+            ViewModel.NavigateCommand.Execute(args);
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using CustomWallpaper.Domain.Models;
-using Prism.Windows.Mvvm;
+using CustomWallpaper.Navigation;
 using Prism.Windows.Navigation;
 using System.Collections.Generic;
 
 namespace CustomWallpaper.ViewModels
 {
-    public class ImageViewerPageViewModel : ViewModelBase
+    public class ImageViewerPageViewModel : ViewModelBaseEx
     {
         private ImageItem _image;
         public ImageItem Image

@@ -1,11 +1,12 @@
 ﻿using CustomWallpaper.Core.Events;
 using CustomWallpaper.Core.Services;
+using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.BackgroundTasks;
 using CustomWallpaper.Services.SmartEngine;
+using CustomWallpaper.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Windows.Mvvm;
-using Prism.Windows.Navigation;
 using System;
 using System.Diagnostics;
 using Windows.Storage;
@@ -17,7 +18,7 @@ namespace CustomWallpaper.ViewModels
 {
     public class AppShellViewModel : ViewModelBase
     {
-        private readonly INavigationService _navigationService;
+        private readonly INavigationServiceEx _navigationServiceEx;
         private readonly ILoggerService _loggerService;
 
         private readonly IBackgroundTaskService _backgroundTaskService;
@@ -36,16 +37,24 @@ namespace CustomWallpaper.ViewModels
         public DelegateCommand StartSmartEngineCommand { get; }
         public DelegateCommand StopSmartEngineCommand { get; }
 
+        public DelegateCommand<NavigationViewItemInvokedEventArgs> NavigateCommand { get; }
+
         // Crash
         public DelegateCommand ForceCrashCommand { get; }
 
-        public AppShellViewModel(INavigationService navigationService,
+        public AppShellViewModel()
+        {
+                
+        }
+
+        public AppShellViewModel(
+            INavigationServiceEx navigationServiceEx,
             ILoggerService loggerService,
             IBackgroundTaskService backgroundTaskService,
             ISmartEngineService smartEngineService,
             IEventAggregator eventAggregator)
         {
-            _navigationService = navigationService;
+            _navigationServiceEx = navigationServiceEx;
             _backgroundTaskService = backgroundTaskService;
             _smartEngineService = smartEngineService;
             _loggerService = loggerService;
@@ -64,21 +73,43 @@ namespace CustomWallpaper.ViewModels
 
             // Crash
             ForceCrashCommand = new DelegateCommand(ForceCrash);
+
+            // Navigate
+            NavigateCommand = new DelegateCommand<NavigationViewItemInvokedEventArgs>(OnNavigateAsync);
         }
 
-        public DelegateCommand<string> NavigateCommand => new DelegateCommand<string>(Navigate);
-
-        private void Navigate(string page)
+        private async void OnNavigateAsync(NavigationViewItemInvokedEventArgs args)
         {
-            try
+            if (args.InvokedItemContainer is NavigationViewItem item)
             {
-                _navigationService.Navigate(page, null);
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error($"Oops! Something went wrong while navigating: {ex.Message}", ex);
+                string key = item.Tag?.ToString();
+
+                if (!string.IsNullOrEmpty(key))
+                {
+                    Type pageType = ResolvePageTypeFromKey(key);
+                    var navItem = new NavigationItem(key, pageType);
+                    await _navigationServiceEx.NavigateAsync(navItem);
+                }
             }
         }
+
+        private Type ResolvePageTypeFromKey(string key)
+        {
+            switch (key)
+            {
+                case nameof(PicturesGridPage):
+                    return typeof(PicturesGridPage);
+                case nameof(SavedImagesListPage):
+                    return typeof(SavedImagesListPage);
+                case nameof(WallpaperHistoryPage):
+                    return typeof(WallpaperHistoryPage);
+                case nameof(MainPage):
+                    return typeof(MainPage);
+                default:
+                    throw new ArgumentException($"Unknown navigation key: {key}");
+            }
+        }
+
 
         private async void ImportFolder()
         {

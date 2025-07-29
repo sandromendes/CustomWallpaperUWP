@@ -1,14 +1,13 @@
-﻿using CustomWallpaper.Domain.Application;
-using CustomWallpaper.Domain.Models;
+﻿using CustomWallpaper.Domain.Models;
+using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.WallpaperHistories;
 using Prism.Commands;
-using Prism.Windows.Mvvm;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace CustomWallpaper.ViewModels
 {
-    public class WallpaperHistoryPageViewModel : ViewModelBase
+    public class WallpaperHistoryPageViewModel : ViewModelBaseEx
     {
         private readonly IWallpaperHistoryService _historyService;
 
