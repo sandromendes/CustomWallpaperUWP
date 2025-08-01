@@ -1,5 +1,5 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Infrastructure.Locator;
 using System;
 using System.Linq;

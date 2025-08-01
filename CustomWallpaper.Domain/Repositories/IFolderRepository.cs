@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CustomWallpaper.Domain.Application
+namespace CustomWallpaper.Domain.Repositories
 {
     public interface IFolderRepository
     {

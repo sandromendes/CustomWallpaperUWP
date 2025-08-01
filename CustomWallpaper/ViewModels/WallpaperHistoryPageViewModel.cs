@@ -1,6 +1,6 @@
 ﻿using CustomWallpaper.Domain.Models;
+using CustomWallpaper.Domain.Services;
 using CustomWallpaper.Navigation;
-using CustomWallpaper.Services.WallpaperHistories;
 using Prism.Commands;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

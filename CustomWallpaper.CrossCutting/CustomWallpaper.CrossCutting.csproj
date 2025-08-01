@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{75804C22-9DDB-48B0-B1B4-8F694798A984}</ProjectGuid>
+    <ProjectGuid>{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CustomWallpaper.CrossCutting</RootNamespace>
@@ -125,7 +125,7 @@
     <Compile Include="Services\ILoggerService.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Utils\FileHasher.cs" />
-    <EmbeddedResource Include="Properties\CustomWallpaper.Core.rd.xml" />
+    <EmbeddedResource Include="Properties\CustomWallpaper.CrossCutting.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -134,12 +134,6 @@
     <PackageReference Include="Prism.Core">
       <Version>6.3.0</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CustomWallpaper.Domain\CustomWallpaper.Domain.csproj">
-      <Project>{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}</Project>
-      <Name>CustomWallpaper.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

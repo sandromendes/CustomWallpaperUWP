@@ -2,12 +2,10 @@
 using CustomWallpaper.CrossCutting.Services;
 using CustomWallpaper.CrossCutting.Utils;
 using CustomWallpaper.Domain.Models;
+using CustomWallpaper.Domain.Services;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.BackgroundTasks;
-using CustomWallpaper.Services.Images;
-using CustomWallpaper.Services.SmartEngine;
 using CustomWallpaper.Services.States;
-using CustomWallpaper.Services.WallpaperHistories;
 using CustomWallpaper.Services.Wallpapers;
 using Prism.Commands;
 using Prism.Events;

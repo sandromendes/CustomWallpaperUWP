@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CustomWallpaper.Services.SmartEngine
+namespace CustomWallpaper.Domain.Services
 {
     public interface ISmartEngineService
     {

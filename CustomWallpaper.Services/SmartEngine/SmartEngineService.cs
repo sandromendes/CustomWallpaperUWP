@@ -1,4 +1,5 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
+using CustomWallpaper.Domain.Services;
 using System;
 using System.Threading.Tasks;
 

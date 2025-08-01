@@ -1,5 +1,5 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Domain.Entities;
 using Microsoft.Data.Sqlite;
 using System;
@@ -99,6 +99,34 @@ namespace CustomWallpaper.Infrastructure.Repositories
             catch (Exception ex)
             {
                 _logger.Error(nameof(ImageRepository), ex, $"Failed to retrieve image by hash: {hash}.");
+                throw;
+            }
+        }
+
+        public async Task<Image> GetByPathAsync(string path)
+        {
+            try
+            {
+                using (var connection = DatabaseBootstrapper.GetConnection())
+                {
+                    await connection.OpenAsync();
+                    using (var cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT * FROM Images WHERE FilePath = @path";
+                        cmd.Parameters.AddWithValue("@path", path);
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            var image = await reader.ReadAsync() ? MapImage(reader) : null;
+                            _logger.Info(nameof(ImageRepository), $"Retrieved image by path: {path}.");
+                            return image;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(nameof(ImageRepository), ex, $"Failed to retrieve image by path: {path}.");
                 throw;
             }
         }

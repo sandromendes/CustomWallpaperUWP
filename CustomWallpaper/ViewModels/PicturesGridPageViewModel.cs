@@ -1,5 +1,4 @@
 ﻿using CustomWallpaper.Domain.Models;
-using CustomWallpaper.Services.Images;
 using CustomWallpaper.Services.Wallpapers;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -14,15 +13,14 @@ using Prism.Events;
 using Prism.Windows.Navigation;
 using CustomWallpaper.CrossCutting.Services;
 using System.Threading;
-using CustomWallpaper.Services.Folders;
 using System.Collections.Generic;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.CrossCutting.Utils;
-using CustomWallpaper.Services.WallpaperHistories;
 using System.Windows.Input;
 using CustomWallpaper.Views;
+using CustomWallpaper.Domain.Services;
 
 namespace CustomWallpaper.ViewModels
 {

@@ -1,4 +1,4 @@
-﻿using CustomWallpaper.Domain.Application;
+﻿using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Domain.Entities;
 using System;
 using System.Collections.Generic;

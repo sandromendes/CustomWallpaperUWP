@@ -1,5 +1,5 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Infrastructure.Repositories;
 
 namespace CustomWallpaper.Infrastructure.Locator

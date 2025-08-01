@@ -1,10 +1,11 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using CustomWallpaper.Domain.Services;
 
 namespace CustomWallpaper.Services.Folders
 {

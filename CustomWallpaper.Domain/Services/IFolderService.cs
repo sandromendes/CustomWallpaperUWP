@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CustomWallpaper.Services.Folders
+namespace CustomWallpaper.Domain.Services
 {
     public interface IFolderService
     {

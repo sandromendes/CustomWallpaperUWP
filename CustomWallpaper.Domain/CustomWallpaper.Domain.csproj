@@ -120,15 +120,19 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Application\IFolderRepository.cs" />
-    <Compile Include="Application\IImageRepository.cs" />
-    <Compile Include="Application\IWallpaperHistoryRepository.cs" />
+    <Compile Include="Repositories\IFolderRepository.cs" />
+    <Compile Include="Repositories\IImageRepository.cs" />
+    <Compile Include="Repositories\IWallpaperHistoryRepository.cs" />
     <Compile Include="Entities\Folder.cs" />
     <Compile Include="Entities\Image.cs" />
     <Compile Include="Entities\WallpaperHistory.cs" />
     <Compile Include="Models\ImageItem.cs" />
     <Compile Include="Models\WallpaperHistoryDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IFolderService.cs" />
+    <Compile Include="Services\IImageService.cs" />
+    <Compile Include="Services\ISmartEngineService.cs" />
+    <Compile Include="Services\IWallpaperHistoryService.cs" />
     <EmbeddedResource Include="Properties\CustomWallpaper.Domain.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +140,7 @@
       <Version>6.2.14</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

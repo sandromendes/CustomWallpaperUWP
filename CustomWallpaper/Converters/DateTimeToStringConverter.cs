@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Windows.UI.Xaml.Data;
 
 namespace CustomWallpaper.Converters
@@ -7,10 +8,17 @@ namespace CustomWallpaper.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is DateTime dt)
+            if (value is string str &&
+                DateTime.TryParseExact(str, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
             {
-                return dt.ToString("dd/MM/yyyy HH:mm");
+                return dt.ToString("dd/MM/yyyy HH:mm:ss");
             }
+
+            if (value is DateTime dt2)
+            {
+                return dt2.ToString("dd/MM/yyyy HH:mm:ss");
+            }
+
             return string.Empty;
         }
 

@@ -1,16 +1,17 @@
 ﻿using CustomWallpaper.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.Storage;
 
-namespace CustomWallpaper.Services.Images
+namespace CustomWallpaper.Domain.Repositories
 {
-    public interface IImageService
+    public interface IImageRepository
     {
-        Task AddOrUpdateFromFileAsync(StorageFile file);
         Task<IEnumerable<Image>> GetAllAsync();
-        Task<Image> GetByHashAsync(string hash);
         Task<Image> GetByIdAsync(int id);
+        Task<Image> GetByHashAsync(string hash);
+        Task<Image> GetByPathAsync(string path);
+        Task AddAsync(Image image);
+        Task UpdateAsync(Image image);
         Task<bool> ExistsAsync(string hash);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using CustomWallpaper.CrossCutting.Events;
 using CustomWallpaper.CrossCutting.Services;
+using CustomWallpaper.Domain.Services;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.Services.BackgroundTasks;
-using CustomWallpaper.Services.SmartEngine;
 using CustomWallpaper.Views;
 using Prism.Commands;
 using Prism.Events;

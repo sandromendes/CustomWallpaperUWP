@@ -3,25 +3,102 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:prism="using:Prism.Windows.Mvvm"
+    xmlns:converters="using:CustomWallpaper.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:CustomWallpaper.Domain.Models"
     mc:Ignorable="d"
     prism:ViewModelLocator.AutoWireViewModel="True">
 
+    <Page.Resources>
+        <converters:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
+        <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ScrollViewer>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="400" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Image Area -->
+        <ScrollViewer Grid.Column="0">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Padding="20">
                 <Image Source="{Binding Image.Thumbnail, Mode=OneWay}" 
                        Stretch="Uniform" 
                        MaxWidth="1200" 
                        MaxHeight="800"/>
                 <TextBlock Text="{Binding Image.Name, Mode=OneWay}" 
-                           Foreground="White" 
+                           Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" 
                            FontSize="20" 
                            Margin="0,20,0,0"
                            TextAlignment="Center"/>
             </StackPanel>
         </ScrollViewer>
+
+        <!-- Properties Panel -->
+        <Border Grid.Column="1"
+                Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+                Padding="20"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                BorderThickness="0"
+                CornerRadius="4">
+            <ScrollViewer>
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Image Properties" 
+                               FontSize="22" 
+                               FontWeight="Medium" 
+                               Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                               Margin="0,0,0,10"/>
+
+                    <StackPanel>
+                        <TextBlock Text="Name:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.Name}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Extension:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.FileExtension}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Path:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.Path}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="File Size:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.FileSizeInBytes}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Dimensions:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.Width}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                        <TextBlock Text=" x " Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                        <TextBlock Text="{Binding Image.Height}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Created At:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.DateCreated, Converter={StaticResource DateTimeToStringConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Modified At:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.DateModified, Converter={StaticResource DateTimeToStringConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Hash:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.Hash}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Favorite:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Image.IsFavorite, Converter={StaticResource BoolToYesNoConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Page>

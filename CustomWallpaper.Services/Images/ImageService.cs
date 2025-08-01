@@ -1,11 +1,12 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
 using CustomWallpaper.CrossCutting.Utils;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage;
+using CustomWallpaper.Domain.Services;
 
 namespace CustomWallpaper.Services.Images
 {
@@ -45,8 +46,8 @@ namespace CustomWallpaper.Services.Images
                     FilePath = file.Path,
                     FileExtension = file.FileType,
                     FileSizeInBytes = (long)basicProps.Size,
-                    DateCreated = file.DateCreated.ToString("o"),
-                    DateModified = basicProps.DateModified.ToString("o"),
+                    DateCreated = file.DateCreated.DateTime.ToString("dd/MM/yyyy HH:mm:ss"),
+                    DateModified = basicProps.DateModified.DateTime.ToString("dd/MM/yyyy HH:mm:ss"),
                     Width = (int)props.Width,
                     Height = (int)props.Height,
                     Hash = hash,
@@ -86,6 +87,20 @@ namespace CustomWallpaper.Services.Images
             catch (Exception ex)
             {
                 _logger.Error(Source, ex, $"Error while fetching image with hash {hash}");
+                return null;
+            }
+        }
+
+        public async Task<Image> GetByPathAsync(string path)
+        {
+            try
+            {
+                _logger.Info(Source, $"Fetching image by path: {path}");
+                return await _repository.GetByPathAsync(path);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Source, ex, $"Error while fetching image with path {path}");
                 return null;
             }
         }

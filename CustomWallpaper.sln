@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper", "CustomWa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Tasks", "CustomWallpaper.Tasks\CustomWallpaper.Tasks.csproj", "{76DDE639-30A8-4F5B-B704-CF3C56BEFFAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.CrossCutting", "CustomWallpaper.Core\CustomWallpaper.CrossCutting.csproj", "{75804C22-9DDB-48B0-B1B4-8F694798A984}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Domain", "CustomWallpaper.Domain\CustomWallpaper.Domain.csproj", "{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Infrastructure", "CustomWallpaper.Infrastructure\CustomWallpaper.Infrastructure.csproj", "{788309EC-6772-424C-B0D9-E5E2CC692194}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.Services", "CustomWallpaper.Services\CustomWallpaper.Services.csproj", "{F1A86FB2-8C58-471D-A0CD-93B5515B6DD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWallpaper.CrossCutting", "CustomWallpaper.CrossCutting\CustomWallpaper.CrossCutting.csproj", "{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,22 +67,6 @@ Global
 		{76DDE639-30A8-4F5B-B704-CF3C56BEFFAD}.Release|x64.Build.0 = Release|x64
 		{76DDE639-30A8-4F5B-B704-CF3C56BEFFAD}.Release|x86.ActiveCfg = Release|x86
 		{76DDE639-30A8-4F5B-B704-CF3C56BEFFAD}.Release|x86.Build.0 = Release|x86
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|ARM.ActiveCfg = Debug|ARM
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|ARM.Build.0 = Debug|ARM
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|ARM64.Build.0 = Debug|ARM64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|x64.ActiveCfg = Debug|x64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|x64.Build.0 = Debug|x64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|x86.ActiveCfg = Debug|x86
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Debug|x86.Build.0 = Debug|x86
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|ARM.ActiveCfg = Release|ARM
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|ARM.Build.0 = Release|ARM
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|ARM64.ActiveCfg = Release|ARM64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|ARM64.Build.0 = Release|ARM64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|x64.ActiveCfg = Release|x64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|x64.Build.0 = Release|x64
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|x86.ActiveCfg = Release|x86
-		{75804C22-9DDB-48B0-B1B4-8F694798A984}.Release|x86.Build.0 = Release|x86
 		{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}.Debug|ARM.ActiveCfg = Debug|ARM
 		{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}.Debug|ARM.Build.0 = Debug|ARM
 		{5DA52734-6774-4AA0-97E6-3C16B5FBD6E5}.Debug|ARM64.ActiveCfg = Debug|ARM64
@@ -131,6 +115,22 @@ Global
 		{F1A86FB2-8C58-471D-A0CD-93B5515B6DD2}.Release|x64.Build.0 = Release|x64
 		{F1A86FB2-8C58-471D-A0CD-93B5515B6DD2}.Release|x86.ActiveCfg = Release|x86
 		{F1A86FB2-8C58-471D-A0CD-93B5515B6DD2}.Release|x86.Build.0 = Release|x86
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|ARM.ActiveCfg = Debug|ARM
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|ARM.Build.0 = Debug|ARM
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|ARM64.Build.0 = Debug|ARM64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|x64.ActiveCfg = Debug|x64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|x64.Build.0 = Debug|x64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|x86.ActiveCfg = Debug|x86
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Debug|x86.Build.0 = Debug|x86
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|ARM.ActiveCfg = Release|ARM
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|ARM.Build.0 = Release|ARM
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|ARM64.ActiveCfg = Release|ARM64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|ARM64.Build.0 = Release|ARM64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|x64.ActiveCfg = Release|x64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|x64.Build.0 = Release|x64
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|x86.ActiveCfg = Release|x86
+		{2CC8DE7E-F26E-4CC4-9E87-FEED3E29055C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

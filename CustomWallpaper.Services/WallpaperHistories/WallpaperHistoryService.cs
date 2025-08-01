@@ -1,10 +1,11 @@
 ﻿using CustomWallpaper.CrossCutting.Services;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using CustomWallpaper.Domain.Entities;
 using CustomWallpaper.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CustomWallpaper.Domain.Services;
 
 namespace CustomWallpaper.Services.WallpaperHistories
 {

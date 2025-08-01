@@ -3,13 +3,14 @@ using CustomWallpaper.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CustomWallpaper.Domain.Application
+namespace CustomWallpaper.Domain.Services
 {
-    public interface IWallpaperHistoryRepository
+    public interface IWallpaperHistoryService
     {
-        Task AddAsync(WallpaperHistory history);
+        Task AddAsync(string imageId, string source);
         Task<IEnumerable<WallpaperHistory>> GetAllAsync();
-        Task<IEnumerable<WallpaperHistoryDto>> GetAllWithImageNameAsync();
         Task<WallpaperHistory> GetLastAppliedAsync();
+        Task<IEnumerable<WallpaperHistoryDto>> GetHistoryWithImageNamesAsync();
+        Task AddAsync(WallpaperHistory history);
     }
 }

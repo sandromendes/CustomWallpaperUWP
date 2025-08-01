@@ -11,7 +11,7 @@ using CustomWallpaper.Services.WallpaperHistories;
 using CustomWallpaper.Services.Images;
 using CustomWallpaper.Infrastructure.Repositories;
 using CustomWallpaper.Infrastructure;
-using CustomWallpaper.Domain.Application;
+using CustomWallpaper.Domain.Repositories;
 using Prism.Mvvm;
 using CustomWallpaper.Views;
 using Windows.UI.Xaml.Controls;
@@ -22,7 +22,7 @@ using Prism.Events;
 using CustomWallpaper.Services.Folders;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.ViewModels;
-using System.ComponentModel;
+using CustomWallpaper.Domain.Services;
 
 namespace CustomWallpaper
 {
