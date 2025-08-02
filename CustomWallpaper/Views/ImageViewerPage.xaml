@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:CustomWallpaper.Domain.Models"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     prism:ViewModelLocator.AutoWireViewModel="True">
 
@@ -18,7 +19,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="600" />
         </Grid.ColumnDefinitions>
 
         <!-- Image Area -->
@@ -51,54 +52,65 @@
                                Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
                                Margin="0,0,0,10"/>
 
-                    <StackPanel>
-                        <TextBlock Text="Name:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.Name}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                    </StackPanel>
+                    <Button Content="Export Properties"
+                            HorizontalAlignment="Left"
+                            Click="ExportToJsonButton_Click"
+                            Margin="0,0,0,10"/>
+                    <controls:DataGrid x:Name="PropertiesGrid"
+                                       AutoGenerateColumns="False"
+                                       HeadersVisibility="Column"
+                                       GridLinesVisibility="All"
+                                       IsReadOnly="False"
+                                       ItemsSource="{x:Bind ViewModel.ImageProperties, Mode=OneWay}"
+                                       RowHeight="36"
+                                       FontSize="14"
+                                       MinColumnWidth="100"
+                                       VerticalAlignment="Stretch"
+                                       HorizontalAlignment="Stretch">
 
-                    <StackPanel>
-                        <TextBlock Text="Extension:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.FileExtension}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                    </StackPanel>
+                        <controls:DataGrid.Columns>
+                            <controls:DataGridTemplateColumn Header="Property" Width="*" IsReadOnly="true">
+                                <controls:DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Key}" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </controls:DataGridTemplateColumn.CellTemplate>
+                            </controls:DataGridTemplateColumn>
 
-                    <StackPanel>
-                        <TextBlock Text="Path:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.Path}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" TextWrapping="Wrap"/>
-                    </StackPanel>
+                            <controls:DataGridTemplateColumn Header="Value" MinWidth="200">
+                                <controls:DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                    <StackPanel>
-                        <TextBlock Text="File Size:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.FileSizeInBytes}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                    </StackPanel>
+                                            <TextBlock Text="{Binding Value}"
+                                                       TextWrapping="Wrap"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0,0,8,0"
+                                                       ToolTipService.ToolTip="{Binding Value}"
+                                                       Grid.Column="0"/>
 
-                    <StackPanel>
-                        <TextBlock Text="Dimensions:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.Width}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-                        <TextBlock Text=" x " Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-                        <TextBlock Text="{Binding Image.Height}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-                    </StackPanel>
-
-                    <StackPanel>
-                        <TextBlock Text="Created At:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.DateCreated, Converter={StaticResource DateTimeToStringConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                    </StackPanel>
-
-                    <StackPanel>
-                        <TextBlock Text="Modified At:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.DateModified, Converter={StaticResource DateTimeToStringConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                    </StackPanel>
-
-                    <StackPanel>
-                        <TextBlock Text="Hash:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.Hash}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" TextWrapping="Wrap"/>
-                    </StackPanel>
-
-                    <StackPanel>
-                        <TextBlock Text="Favorite:" FontWeight="SemiBold" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Text="{Binding Image.IsFavorite, Converter={StaticResource BoolToYesNoConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                    </StackPanel>
+                                            <Button Content="⋯"
+                                                    VerticalAlignment="Center"
+                                                    Grid.Column="1"
+                                                    Width="32"
+                                                    Height="32"
+                                                    HorizontalAlignment="Right"
+                                                    Click="CopyValueButton_Click"
+                                                    Tag="{Binding Value}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </controls:DataGridTemplateColumn.CellTemplate>
+                            </controls:DataGridTemplateColumn>
+                        </controls:DataGrid.Columns>
+                    </controls:DataGrid>
                 </StackPanel>
             </ScrollViewer>
         </Border>
+        
     </Grid>
 </Page>

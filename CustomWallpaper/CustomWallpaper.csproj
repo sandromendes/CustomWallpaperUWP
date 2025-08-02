@@ -203,6 +203,9 @@
     <PackageReference Include="SQLitePCLRaw.bundle_green">
       <Version>2.1.11</Version>
     </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>9.0.7</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AppShell.xaml">
