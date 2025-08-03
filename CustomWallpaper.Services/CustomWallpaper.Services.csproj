@@ -127,7 +127,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartEngine\SmartEngineService.cs" />
     <Compile Include="WallpaperHistories\WallpaperHistoryService.cs" />
-    <Compile Include="Wallpapers\IWallpaperService.cs" />
     <Compile Include="Wallpapers\WallpaperService.cs" />
     <EmbeddedResource Include="Properties\CustomWallpaper.Services.rd.xml" />
   </ItemGroup>
@@ -144,6 +143,10 @@
     <ProjectReference Include="..\CustomWallpaper.Domain\CustomWallpaper.Domain.csproj">
       <Project>{5da52734-6774-4aa0-97e6-3c16b5fbd6e5}</Project>
       <Name>CustomWallpaper.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CustomWallpaper.Infrastructure\CustomWallpaper.Infrastructure.csproj">
+      <Project>{788309ec-6772-424c-b0d9-e5e2cc692194}</Project>
+      <Name>CustomWallpaper.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\CustomWallpaper.Tasks\CustomWallpaper.Tasks.csproj">
       <Project>{76dde639-30a8-4f5b-b704-cf3c56beffad}</Project>

@@ -23,6 +23,7 @@ using CustomWallpaper.Services.Folders;
 using CustomWallpaper.Navigation;
 using CustomWallpaper.ViewModels;
 using CustomWallpaper.Domain.Services;
+using CustomWallpaper.Infrastructure.Services;
 
 namespace CustomWallpaper
 {

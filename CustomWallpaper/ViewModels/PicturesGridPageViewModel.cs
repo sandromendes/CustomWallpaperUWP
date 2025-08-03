@@ -1,5 +1,4 @@
 ﻿using CustomWallpaper.Domain.Models;
-using CustomWallpaper.Services.Wallpapers;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.Storage.AccessCache;
@@ -21,6 +20,7 @@ using CustomWallpaper.CrossCutting.Utils;
 using System.Windows.Input;
 using CustomWallpaper.Views;
 using CustomWallpaper.Domain.Services;
+using CustomWallpaper.Infrastructure.Services;
 
 namespace CustomWallpaper.ViewModels
 {

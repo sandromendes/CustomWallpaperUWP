@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace CustomWallpaper.Services.Wallpapers
+namespace CustomWallpaper.Infrastructure.Services
 {
     public interface IWallpaperService
     {

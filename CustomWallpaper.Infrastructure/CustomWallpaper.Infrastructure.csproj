@@ -126,6 +126,7 @@
     <Compile Include="Repositories\FolderRepository.cs" />
     <Compile Include="Repositories\ImageRepository.cs" />
     <Compile Include="Repositories\WallpaperHistoryRepository.cs" />
+    <Compile Include="Services\IWallpaperService.cs" />
     <EmbeddedResource Include="Properties\CustomWallpaper.Infrastructure.rd.xml" />
   </ItemGroup>
   <ItemGroup>
