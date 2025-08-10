@@ -21,6 +21,7 @@ using System.Windows.Input;
 using CustomWallpaper.Views;
 using CustomWallpaper.Domain.Services;
 using CustomWallpaper.Infrastructure.Services;
+using Windows.Storage.FileProperties;
 
 namespace CustomWallpaper.ViewModels
 {
@@ -66,14 +67,27 @@ namespace CustomWallpaper.ViewModels
             SetAsLockScreenCommand = new DelegateCommand<ImageItem>(SetAsLockscreen);
             NavigateToImageViewerCommand = new DelegateCommand<ImageItem>(NavigateToImageViewer);
 
-            _eventAggregator.GetEvent<FolderImportedEvent>().Subscribe(async storageFolder =>
-            {
-                await RegisterFolderAsync(storageFolder);
-
-                await LoadRegisteredFoldersAsync();
-            });
+            _eventAggregator
+                .GetEvent<FolderImportedEvent>()
+                .Subscribe(async storageFolder => await HandleFolderImportedAsync(storageFolder));
 
             _dispatcher = Window.Current.Dispatcher;
+        }
+
+        private async Task HandleFolderImportedAsync(StorageFolder storageFolder)
+        {
+            try
+            {
+                var token = $"Folder_{Guid.NewGuid()}";
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace(token, storageFolder);
+
+                await RegisterAllMediaAsync(storageFolder.Path, token).ConfigureAwait(false);
+                await LoadRegisteredFoldersAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _loggerService?.Error(nameof(PicturesGridPageViewModel), ex, $"Error while importing folder: {storageFolder?.Path}");
+            }
         }
 
         public override async Task OnShowAsync(object parameter = null)
@@ -97,6 +111,12 @@ namespace CustomWallpaper.ViewModels
             {
                 _loggerService.Error(nameof(PicturesGridPageViewModel), ex, $"Failed to load registered folders.");
             }
+        }
+
+        public async Task RegisterAllMediaAsync(string rootFolder, string token)
+        {
+            var allFolders = await _folderService.RegisterAllFoldersRecursivelyAsync(rootFolder, token);
+            await _imageService.RegisterImagesInFoldersAsync(allFolders, token);
         }
 
         private async Task RegisterFolderAsync(StorageFolder storageFolder)
@@ -152,37 +172,43 @@ namespace CustomWallpaper.ViewModels
 
         private readonly SemaphoreSlim _loadImagesSemaphore = new SemaphoreSlim(1, 1);
 
+        /// <summary>
+        /// Loads all image files from the given folder into the Images collection, creating thumbnails asynchronously.
+        /// Prevents reentrancy using a semaphore and ensures BitmapImage creation occurs on the UI thread.
+        /// </summary>
         public async Task LoadImagesFromFolderAsync(StorageFolder folder)
         {
             if (folder == null)
                 return;
 
             if (!await _loadImagesSemaphore.WaitAsync(0))
-                return; // evita reentrância
+                return;
 
             try
             {
                 var files = await folder.GetFilesAsync();
-                foreach (var file in files)
+                var imageFiles = files.Where(f =>
                 {
-                    var ext = file.FileType.ToLowerInvariant();
-                    if (ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".bmp")
+                    var ext = f.FileType.ToLowerInvariant();
+                    return ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".bmp";
+                }).ToList();
+
+                var tasks = imageFiles.Select(async file =>
+                {
+                    var thumbnail = await CreateThumbnailAsync(file);
+
+                    await _dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
                     {
-                        await _imageService.AddOrUpdateFromFileAsync(file);
-
-                        var thumb = await LoadThumbnailAsync(file);
-
-                        await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        Images.Add(new ImageItem
                         {
-                            Images.Add(new ImageItem
-                            {
-                                Name = file.Name,
-                                Path = file.Path,
-                                Thumbnail = thumb
-                            });
+                            Name = file.Name,
+                            Path = file.Path,
+                            Thumbnail = thumbnail
                         });
-                    }
-                }
+                    });
+                });
+
+                await Task.WhenAll(tasks);
             }
             finally
             {
@@ -190,14 +216,12 @@ namespace CustomWallpaper.ViewModels
             }
         }
 
-        private async Task<BitmapImage> LoadThumbnailAsync(StorageFile file)
+        private async Task<BitmapImage> CreateThumbnailAsync(StorageFile file)
         {
-            using (var stream = await file.OpenAsync(FileAccessMode.Read))
-            {
-                var bitmap = new BitmapImage();
-                await bitmap.SetSourceAsync(stream);
-                return bitmap;
-            }
+            var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.PicturesView, 150, ThumbnailOptions.UseCurrentScale);
+            var bitmapImage = new BitmapImage();
+            await bitmapImage.SetSourceAsync(thumbnail);
+            return bitmapImage;
         }
 
         private async void SetAsWallpaper(ImageItem item)

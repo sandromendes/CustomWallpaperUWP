@@ -7,6 +7,7 @@ namespace CustomWallpaper.Domain.Services
 {
     public interface IImageService
     {
+        Task RegisterImagesInFoldersAsync(IEnumerable<string> folders, string token);
         Task<IEnumerable<Image>> GetAllAsync();
         Task<Image> GetByIdAsync(int id);
         Task<Image> GetByHashAsync(string hash);

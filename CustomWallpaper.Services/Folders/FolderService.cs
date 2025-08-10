@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using CustomWallpaper.Domain.Services;
+using Windows.Storage.AccessCache;
+using Windows.Storage;
 
 namespace CustomWallpaper.Services.Folders
 {
@@ -19,6 +21,70 @@ namespace CustomWallpaper.Services.Folders
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
+        public async Task<IEnumerable<string>> RegisterAllFoldersRecursivelyAsync(string rootFolder, string token)
+        {
+            rootFolder = Path.GetFullPath(rootFolder);
+
+            var allFolders = GetAllFoldersRecursively(rootFolder);
+
+            foreach (var folderPath in allFolders)
+                await RegisterFolderAsync(folderPath, token);
+
+            return allFolders;
+        }
+
+        private async Task RegisterFolderAsync(string folderPath, string token)
+        {
+            if (!await _repository.ExistsAsync(folderPath))
+            {
+                StorageFolder storageFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(token);
+
+                var folder = new Folder
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FolderPath = folderPath,
+                    FolderName = Path.GetFileName(folderPath),
+                    DateAdded = storageFolder.DateCreated.Date,
+                    AccessToken = token
+                };
+
+                await _repository.AddAsync(folder);
+            }
+        }
+
+        private IEnumerable<string> GetAllFoldersRecursively(string rootFolder)
+        {
+            var allFolders = new List<string>();
+
+            void Recurse(string folder)
+            {
+                allFolders.Add(folder);
+
+                try
+                {
+                    var subfolders = Directory.GetDirectories(folder);
+                    foreach (var subfolder in subfolders)
+                    {
+                        Recurse(subfolder);
+                    }
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    // Ignora pastas inacessíveis
+                    _logger.Error(nameof(FolderService), ex, "Error trying to access folder.");
+                }
+                catch (IOException ex)
+                {
+                    // Ignora erros de IO temporários
+                    _logger.Error(nameof(FolderService), ex, "Error trying to access folder.");
+                }
+            }
+
+            Recurse(rootFolder);
+            return allFolders;
+        }
+
 
         public async Task AddFolderAsync(string path, string token)
         {
