@@ -6,6 +6,7 @@ namespace CustomWallpaper.Domain.Services
 {
     public interface IFolderService
     {
+        Task<IEnumerable<string>> RegisterAllFoldersRecursivelyAsync(string rootFolder, string token);
         Task AddFolderAsync(string path, string token);
         Task<IEnumerable<Folder>> GetAllFoldersAsync();
         Task<bool> FolderExistsAsync(string path);
